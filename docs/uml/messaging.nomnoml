@@ -1,0 +1,21 @@
+#title: messaging
+#gutter: 100
+#spacing: 100
+#bendSize: 1
+#arrowSize: 0.8
+
+[<abstract>ServiceBus|route(ceq, handler)]
+
+[ServiceBus] <:-- [CommandBus|dispatch(command)]
+[ServiceBus] <:-- [EventBus|dispatch(event)]
+[ServiceBus] <:-- [QueryBus|dispatch(query)]
+
+[<reference> EventBus] <-- dispatch() [PlayerPickedItem|item_id]
+[<reference> EventBus] --> handle(event) [InventoryUpdater|handle(event)]
+
+[<reference> CommandBus] <-- dispatch() [KillMonster|monster_id]
+[<reference> CommandBus] --> handle(command) [MonstersStateManager|handle(command)]
+
+[<reference> QueryBus] <--> dispatch()[GetItemDescription|item_id]
+[<reference> QueryBus] --> handle(query) [ItemsInfoManager|handle(query)]
+[<reference> QueryBus] respond(item_desc) <-- [ItemsInfoManager]
