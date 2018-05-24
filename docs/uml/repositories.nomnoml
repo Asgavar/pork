@@ -1,0 +1,18 @@
+#title: repositories
+#gutter: 100
+#spacing: 100
+#bendSize: 1
+#arrowSize: 0.8
+
+[<abstract>WorldLayoutRepository|load_world_layout();save(world_layout)]
+[<abstract>InventoryRepository|load_inventory();save(inventory)]
+[<abstract>GatesRepository|load_gates();save(gates)]
+[<abstract>MonstersRepository|load_monsters();save(monsters)]
+
+[WorldLayoutRepository] <:-- [YamlGameLoader|load(yaml_file_name);save(world_layout)]
+
+[GameStateSaver|load_inventory();load_gates();load_monsters;save(inventory_or_gates_or_monsters)]
+
+[InventoryRepository] <:-- [GameStateSaver]
+[GatesRepository] <:-- [GameStateSaver]
+[MonstersRepository] <:-- [GameStateSaver]

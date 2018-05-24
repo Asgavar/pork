@@ -1,0 +1,17 @@
+#title: aggregates
+#gutter: 100
+#spacing: 100
+#bendSize: 1
+#arrowSize: 0.8
+
+[WorldLayout] -> [WorldItem]
+[WorldLayout] -> [PickableItem|on_use();on_look()]
+[PickableItem] -> [Action]
+[Action] <:-- [DisplayStoryText]
+[Action] <:-- [SpawnItem]
+
+[Inventory] -> [InventoryItem|item_id]
+
+[Gates|open(gate_id);close(gate_id)]
+
+[Monsters|attack(monster_id)]
