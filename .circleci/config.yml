@@ -5,4 +5,5 @@ jobs:
       - image: circleci/python:3.6-jessie
     steps:
       - checkout
+      - run: sudo pip install pytest
       - run: python -m pytest -v
