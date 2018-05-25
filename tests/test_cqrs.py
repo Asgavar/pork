@@ -1,0 +1,54 @@
+import pytest
+import pork.cqrs
+
+
+class SpyEventHandler:
+
+    def __init__(self):
+        self.calls = 0
+
+    def __call__(self, event):
+        self.calls += 1
+
+    def call_count(self):
+        return self.calls
+
+
+class DummyEvent(pork.cqrs.Event):
+    pass
+
+
+def test_only_one_func_router(route_def_repetitions):
+    router = pork.cqrs.OnlyOneFunctionRouter()
+    handler = SpyEventHandler()
+    repeat_n_times(
+        lambda: router.route_class_to_func(DummyEvent, handler),
+        route_def_repetitions
+    )
+
+    router.route(DummyEvent())
+
+    assert handler.call_count() == 1
+
+
+def test_many_func_router(route_def_repetitions):
+    router = pork.cqrs.AllWhichMatchFunctionRouter()
+    handler = SpyEventHandler()
+    repeat_n_times(
+        lambda: router.route_class_to_func(DummyEvent, handler),
+        route_def_repetitions
+    )
+
+    router.route(DummyEvent())
+
+    assert handler.call_count() == route_def_repetitions
+
+
+def repeat_n_times(func, n):
+    for _ in range(n):
+        func()
+
+
+@pytest.fixture(params=[1, 5, 99])
+def route_def_repetitions(request):
+    return request.param
