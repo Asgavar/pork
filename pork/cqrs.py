@@ -64,17 +64,17 @@ class ServiceBus:
 
 class CommandBus(ServiceBus):
 
-    def dispatch(command: Command) -> None:
+    def dispatch(self, command: Command) -> None:
         pass
 
 
 class EventBus(ServiceBus):
 
-    def dispatch(event: Event) -> None:
+    def dispatch(self, event: Event) -> None:
         pass
 
 
 class QueryBus(ServiceBus):
 
-    def dispatch(query: Query) -> QueryResponse:
+    def dispatch(self, query: Query) -> QueryResponse:
         pass
