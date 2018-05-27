@@ -28,35 +28,35 @@ class Router(abc.ABC):
 class OnlyOneFunctionRouter():
 
     def __init__(self):
-        self.route_map = {}
+        self._route_map = {}
 
     def route_class_to_func(self, clsname, handler_func) -> None:
-        self.route_map[clsname] = handler_func
+        self._route_map[clsname] = handler_func
 
     def route(self, event_command_query) -> None:
-        self.route_map[type(event_command_query)](event_command_query)
+        self._route_map[type(event_command_query)](event_command_query)
 
 
 class AllWhichMatchFunctionRouter():
 
     def __init__(self):
-        self.route_map = defaultdict(lambda: [])
+        self._route_map = defaultdict(lambda: [])
 
     def route_class_to_func(self, clsname, handler_func) -> None:
-        self.route_map[clsname].append(handler_func)
+        self._route_map[clsname].append(handler_func)
 
     def route(self, event_command_query):
-        for handler in self.route_map[type(event_command_query)]:
+        for handler in self._route_map[type(event_command_query)]:
             handler(event_command_query)
 
 
 class ServiceBus:
 
     def __init__(self):
-        self.routers = []
+        self._routers = []
 
     def attach_router(self, router: Router) -> None:
-        self.routers.append(router)
+        self._routers.append(router)
 
     def dispatch(self, command_event_query):
         pass

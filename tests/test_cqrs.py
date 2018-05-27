@@ -10,9 +10,6 @@ class SpyEventHandler:
     def __call__(self, event):
         self.calls += 1
 
-    def call_count(self):
-        return self.calls
-
 
 class DummyEvent(pork.cqrs.Event):
     pass
@@ -28,7 +25,7 @@ def test_only_one_func_router(route_def_repetitions):
 
     router.route(DummyEvent())
 
-    assert handler.call_count() == 1
+    assert handler.calls == 1
 
 
 def test_many_func_router(route_def_repetitions):
@@ -41,7 +38,7 @@ def test_many_func_router(route_def_repetitions):
 
     router.route(DummyEvent())
 
-    assert handler.call_count() == route_def_repetitions
+    assert handler.calls == route_def_repetitions
 
 
 def repeat_n_times(func, n):
