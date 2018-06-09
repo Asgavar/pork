@@ -1,7 +1,7 @@
 from collections import defaultdict
 from typing import DefaultDict, Dict, List, Tuple
 
-from pork.entities import Door, Item, WorldObject
+from pork.entities import Door, Item, Monster, WorldObject
 
 
 class WorldLayout:
@@ -37,11 +37,11 @@ class WorldLayout:
 
     @_only_go_if_path_not_blocked('south')
     def move_player_south(self) -> None:
-        self._player_loc[self.HORIZONTAL_POSITION] -= 1
+        self._player_loc[self.VERTICAL_POSITION] -= 1
 
     @_only_go_if_path_not_blocked('west')
     def move_player_west(self) -> None:
-        self._player_loc[self.VERTICAL_POSITION] -= 1
+        self._player_loc[self.HORIZONTAL_POSITION] -= 1
 
     def objects_in_the_current_room(self) -> List:
         return self._world_map[tuple(self._player_loc)]
@@ -64,14 +64,14 @@ class Doors:
 
 class Monsters:
 
-    def __init__(self, monsters_health: Dict[str, int]={}) -> None:
-        self._monsters_health = monsters_health
+    def __init__(self, monsters: Dict[str, Monster]={}) -> None:
+        self._monsters = monsters
 
     def attack(self, monster_name: str, power: int) -> None:
-        self._monsters_health[monster_name] -= power
+        self._monsters[monster_name].health -= power
 
-    def is_monster_alive(self, monster_name: str) -> bool:
-        return self._monsters_health[monster_name] > 0
+    def is_monster_dead(self, monster_name: str) -> bool:
+        return self._monsters[monster_name].health <= 0
 
 
 class PlayerInventory:
