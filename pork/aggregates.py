@@ -14,8 +14,7 @@ class WorldLayout:
         self._player_loc = [initial_horizontal, initial_vertical]
         self._world_map = world_map
 
-    @staticmethod
-    def _only_go_if_path_not_blocked(direction: str):
+    def _only_go_if_path_not_blocked(direction: str):  # type: ignore
         def real_decorator(func):
             def decorated(*args, **kwargs):
                 if any(hasattr(worlditem, 'door_direction') and
