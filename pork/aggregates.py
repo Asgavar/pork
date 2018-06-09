@@ -1,6 +1,7 @@
-from typing import Dict, List, Tuple
+from collections import defaultdict
+from typing import DefaultDict, Dict, List, Tuple
 
-from .entities import WorldObject, Item
+from pork.entities import WorldObject, Item
 
 
 class WorldLayout:
@@ -8,19 +9,37 @@ class WorldLayout:
     VERTICAL_POSITION = 1
 
     def __init__(self, initial_horizontal: int=0, initial_vertical: int=0,
-                 world_map: Dict[Tuple, List[WorldObject]]={}) -> None:
+                 world_map: DefaultDict[Tuple, List[WorldObject]] =
+                 defaultdict(lambda: [])) -> None:
         self._player_loc = [initial_horizontal, initial_vertical]
         self._world_map = world_map
 
+    @staticmethod
+    def _only_go_if_path_not_blocked(direction: str):
+        def real_decorator(func):
+            def decorated(*args, **kwargs):
+                if any(hasattr(worlditem, 'door_direction') and
+                       worlditem.door_direction == direction
+                       for worlditem in args[0].objects_in_the_current_room()):
+                    pass
+                else:
+                    func(*args, **kwargs)
+            return decorated
+        return real_decorator
+
+    @_only_go_if_path_not_blocked('north')
     def move_player_north(self) -> None:
         self._player_loc[self.VERTICAL_POSITION] += 1
 
+    @_only_go_if_path_not_blocked('east')
     def move_player_east(self) -> None:
         self._player_loc[self.HORIZONTAL_POSITION] += 1
 
+    @_only_go_if_path_not_blocked('south')
     def move_player_south(self) -> None:
         self._player_loc[self.HORIZONTAL_POSITION] -= 1
 
+    @_only_go_if_path_not_blocked('west')
     def move_player_west(self) -> None:
         self._player_loc[self.VERTICAL_POSITION] -= 1
 

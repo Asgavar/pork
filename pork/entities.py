@@ -10,8 +10,9 @@ class WorldObject(abc.ABC):
 
 class Door(WorldObject):
 
-    def __init__(self, door_name: str) -> None:
+    def __init__(self, door_name: str, door_direction: str) -> None:
         self._door_name = door_name
+        self.door_direction = door_direction
 
     def description(self) -> str:
         return f'Drzwi o nazwie {self._door_name}'
