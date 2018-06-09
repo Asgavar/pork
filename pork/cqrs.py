@@ -1,5 +1,6 @@
 import abc
 from collections import defaultdict
+from typing import Any
 
 
 class Command:
@@ -11,10 +12,6 @@ class Event:
 
 
 class Query:
-    pass
-
-
-class QueryResponse:
     pass
 
 
@@ -76,5 +73,5 @@ class EventBus(ServiceBus):
 
 class QueryBus(ServiceBus):
 
-    def dispatch(self, query: Query) -> QueryResponse:
+    def dispatch(self, query: Query) -> Any:
         pass
