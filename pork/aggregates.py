@@ -1,7 +1,7 @@
 from collections import defaultdict
 from typing import DefaultDict, Dict, List, Tuple
 
-from pork.entities import WorldObject, Item
+from pork.entities import Door, Item, WorldObject
 
 
 class WorldLayout:
@@ -18,7 +18,8 @@ class WorldLayout:
         def real_decorator(func):
             def decorated(*args, **kwargs):
                 if any(hasattr(worlditem, 'door_direction') and
-                       worlditem.door_direction == direction
+                       worlditem.door_direction == direction and
+                       worlditem.is_open is False
                        for worlditem in args[0].objects_in_the_current_room()):
                     pass
                 else:
@@ -48,17 +49,17 @@ class WorldLayout:
 
 class Doors:
 
-    def __init__(self, doors_state: Dict[str, bool]={}) -> None:
-        self._doors_state = doors_state
+    def __init__(self, doors_lookup: Dict[str, Door]={}) -> None:
+        self._doors_lookup = doors_lookup
 
     def open(self, door_name: str):
-        self._doors_state[door_name] = True
+        self._doors_lookup[door_name].is_open = True
 
     def close(self, door_name: str):
-        self._doors_state[door_name] = False
+        self._doors_lookup[door_name].is_open = False
 
     def is_door_open(self, door_name: str) -> bool:
-        return self._doors_state[door_name]
+        return self._doors_lookup[door_name].is_open
 
 
 class Monsters:
@@ -83,3 +84,6 @@ class PlayerInventory:
 
     def drop_item_from_inventory(self, item_to_drop: Item):
         self._player_items.remove(item_to_drop)
+
+    def currently_held_items(self):
+        return self._player_items

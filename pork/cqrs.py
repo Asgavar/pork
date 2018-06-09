@@ -30,8 +30,8 @@ class OnlyOneFunctionRouter():
     def route_class_to_func(self, clsname, handler_func) -> None:
         self._route_map[clsname] = handler_func
 
-    def route(self, event_command_query) -> None:
-        self._route_map[type(event_command_query)](event_command_query)
+    def route(self, event_command_query) -> Any:
+        return self._route_map[type(event_command_query)](event_command_query)
 
 
 class AllWhichMatchFunctionRouter():
@@ -74,4 +74,4 @@ class EventBus(ServiceBus):
 class QueryBus(ServiceBus):
 
     def dispatch(self, query: Query) -> Any:
-        pass
+        return self._routers[-1].route(query)
