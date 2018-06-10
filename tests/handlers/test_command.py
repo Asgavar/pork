@@ -47,7 +47,8 @@ def test_attacking():
     })
     rng = FakeRng()
     router.route_class_to_func(
-        c.AttackMonster, ch.AttackMonsterHandler(monsters, rng=rng)
+        c.AttackMonster,
+        ch.AttackMonsterHandler(monsters, pork.cqrs.EventBus(), rng=rng)
     )
 
     command_bus.dispatch(c.AttackMonster(monster1_name))

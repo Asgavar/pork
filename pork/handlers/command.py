@@ -2,6 +2,8 @@ import random
 
 import pork.aggregates as a
 import pork.commands as c
+import pork.cqrs
+import pork.events as ev
 
 
 # class UseItemHandler:
@@ -37,13 +39,14 @@ class RandomRandintTo100:
 
 class AttackMonsterHandler:
 
-    def __init__(self, monsters: a.Monsters, rng=RandomRandintTo100()) -> None:
+    def __init__(self, monsters: a.Monsters, event_bus: pork.cqrs.EventBus,
+                 rng=RandomRandintTo100()) -> None:
         self.rng = rng
         self.monsters = monsters
+        self.event_bus = event_bus
 
     def __call__(self, command: c.AttackMonster):
         attack_power = self.rng()
         self.monsters.attack(command.monster_name, attack_power)
         if self.monsters.is_monster_dead(command.monster_name):
-            # TODO: emit MonsterDied event
-            pass
+            self.event_bus.dispatch(ev.MonsterDied(command.monster_name))

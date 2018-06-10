@@ -11,7 +11,7 @@ def test_description_of_whole_world():
     querybus.attach_router(router)
     some_door = e.Door('north_doors_0_0', 'north')
     some_monster = e.Monster('Wielki Groźny Szczur', 100)
-    some_item = e.Item('Magiczny Miecz', None)
+    some_item = e.Item('Magiczny Miecz')
     world_map = {
         (0, 0): [
             some_door, some_monster, some_item
@@ -35,8 +35,8 @@ def test_description_of_inventory():
     querybus = pork.cqrs.QueryBus()
     router = pork.cqrs.OnlyOneFunctionRouter()
     querybus.attach_router(router)
-    item1 = e.Item('Kijek Prawdy', None)
-    item2 = e.Item('Patyk Kłamstwa', None)
+    item1 = e.Item('Kijek Prawdy')
+    item2 = e.Item('Patyk Kłamstwa')
     inventory = a.PlayerInventory()
     router.route_class_to_func(
         q.DescriptionOfInventory,

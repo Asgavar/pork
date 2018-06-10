@@ -23,7 +23,7 @@ class Door(WorldObject):
 
 class Item(WorldObject):
 
-    def __init__(self, item_name: str, action_triggered) -> None:
+    def __init__(self, item_name: str) -> None:
         self._item_name = item_name
 
     def description(self) -> str:

@@ -69,7 +69,8 @@ class CommandBus(ServiceBus):
 class EventBus(ServiceBus):
 
     def dispatch(self, event: Event) -> None:
-        pass
+        for router in self._routers:
+            router.route(event)
 
 
 class QueryBus(ServiceBus):
