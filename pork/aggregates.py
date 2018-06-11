@@ -1,4 +1,5 @@
 from collections import defaultdict
+import functools
 from typing import DefaultDict, Dict, List, Tuple
 
 from pork.entities import Door, Item, Monster, WorldObject
@@ -16,6 +17,7 @@ class WorldLayout:
 
     def _only_go_if_path_not_blocked(direction: str):  # type: ignore
         def real_decorator(func):
+            @functools.wraps(func)
             def decorated(*args, **kwargs):
                 if any(hasattr(worlditem, 'door_direction') and
                        worlditem.door_direction == direction and
