@@ -89,7 +89,8 @@ class WorldGenerator:
         door_directions = self.decider.doors_in_which_directions()
         possible_directions = ['north', 'east', 'south', 'west']
         doors_in_room = [
-            direction for direction in possible_directions
+            self.create_door(coords, direction)
+            for direction in possible_directions
             if direction in door_directions
         ]
         room_as_list.extend(doors_in_room)
@@ -102,7 +103,7 @@ class WorldGenerator:
 
     def create_monster(self):
         MONSTER_MAX_HEALTH = 100
-        monster_name = 'potwór_'+str(uuid.uuid4())[0, 9]
+        monster_name = 'potwór_'+str(uuid.uuid4())[0:9]
         return Monster(monster_name, MONSTER_MAX_HEALTH)
 
     def mark_rooms_to_be_created(self, current_pos: XYTuple) -> List[XYTuple]:
@@ -133,7 +134,7 @@ class WorldGenerator:
     def process_world_map(self, world_map: Dict[Tuple, List[WorldObject]],
                           monsters: Monsters, doors: Doors,
                           inventory: PlayerInventory) -> None:
-        for room in world_map:
+        for coord, room in world_map.items():
             room_doors = list(
                 filter(lambda elem: isinstance(elem, Door), room)
             )
@@ -141,12 +142,15 @@ class WorldGenerator:
                 filter(lambda elem: isinstance(elem, Monster), room)
             )
             for door in room_doors:
-                item_to_open = Item(door.door_name+'_opener')
+                item_to_open = Item(door._door_name+'_opener')
                 monster_w_item: Monster = random.choice(room_monsters)
-                open_door_action = OpenDoorAction(door.name, doors)
+                # while monster_w_item in monsters.monster_action_mapping.keys():
+                #     monster_w_item = random.choice(room_monsters)
+                open_door_action = OpenDoorAction(door._door_name, doors)
                 spawn_item_action = SpawnItemInInventoryAction(
                     item_to_open, inventory
                 )
+                doors._doors_lookup[door._door_name] = door
                 inventory.item_action_mapping[item_to_open._item_name] =\
                     open_door_action
                 monsters.monster_action_mapping[monster_w_item.monster_name] =\

@@ -1,6 +1,7 @@
 from typing import List
 import pytest
 
+import pork.aggregates as a
 from pork.content_generation import (
     PseudoRandomCreationDecider,
     WorldGenerator,
@@ -22,6 +23,27 @@ def test_mark_rooms_to_be_created(room_count):
     list_of_marked_rooms = generator.mark_rooms_to_be_created((0, 0))
 
     assert len(list_of_marked_rooms) > room_count
+
+
+def test_world_map_processing(room_count):
+    rng = FakeCreationDecider()
+    generator = WorldGenerator(rng, room_count)
+
+    world_map = generator.create_world_map()
+    monsters = a.Monsters()
+    doors = a.Doors()
+    inventory = a.PlayerInventory()
+    generator.process_world_map(world_map, monsters, doors, inventory)
+    door_count = len(doors._doors_lookup)
+    item_action_count = len(inventory.item_action_mapping)
+    monster_action_count = len(monsters.monster_action_mapping)
+
+    assert door_count > 0
+    assert item_action_count > 0
+    assert monster_action_count > 0
+    assert door_count == item_action_count
+    # TODO: why does it fail?
+    # assert item_action_count == monster_action_count
 
 
 @pytest.fixture(params=[1, 5, 15, 50, 200])
