@@ -11,7 +11,7 @@ class SpyEventHandler:
         self.calls += 1
 
 
-class DummyEvent(pork.cqrs.Event):
+class DummyEvent:
     pass
 
 

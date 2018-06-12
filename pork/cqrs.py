@@ -3,18 +3,6 @@ from collections import defaultdict
 from typing import Any
 
 
-class Command:
-    pass
-
-
-class Event:
-    pass
-
-
-class Query:
-    pass
-
-
 class Router(abc.ABC):
 
     @abc.abstractmethod
@@ -74,5 +62,5 @@ class EventBus(ServiceBus):
 
 class QueryBus(ServiceBus):
 
-    def dispatch(self, query: Query) -> Any:
+    def dispatch(self, query) -> Any:
         return self._routers[-1].route(query)

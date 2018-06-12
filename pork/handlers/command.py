@@ -6,16 +6,6 @@ import pork.cqrs
 import pork.events as ev
 
 
-# class UseItemHandler:
-
-#     def __init__(self, inventory: a.PlayerInventory):
-#         self.inventory = inventory
-
-#     def __call__(self, command: c.UseItem):
-#         # TODO: trigger action
-#         self.inventory.
-
-
 class MovePlayerHandler:
 
     def __init__(self, world_layout: a.WorldLayout) -> None:
