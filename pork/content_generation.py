@@ -4,7 +4,7 @@ from typing import Dict, List, Tuple
 import uuid
 
 from pork.actions import OpenDoorAction, SpawnItemInInventoryAction
-from pork.aggregates import Doors, Monsters, WorldLayout
+from pork.aggregates import Doors, Monsters, PlayerInventory
 from pork.entities import Door, Item, Monster, WorldObject
 
 
@@ -130,19 +130,24 @@ class WorldGenerator:
 
         return branches_from_here + branches_from_branches
 
-    # def process_world_map(self, world_map: Dict[Tuple, List[WorldObject]],
-    #                       monsters: Monsters, doors: Doors, inventory) -> None:
-    #     for room in world_map:
-    #         room_doors = list(
-    #             filter(lambda elem: isinstance(elem, Door), room)
-    #         )
-    #         room_monsters = list(
-    #             filter(lambda elem: isinstance(elem, Monster), room)
-    #         )
-    #         for door in room_doors:
-    #             item_which_will_open_it = Item(door.door_name+'_opener')
-    #             monster_which_will_drop_it: Monster = random.choice(room_monsters)
-    #             open_door_action = OpenDoorAction(door.name, doors)
-    #             spawn_item_action = SpawnItemInInventoryAction(
-    #                 item_which_will_open_it, inventory
-    #             )
+    def process_world_map(self, world_map: Dict[Tuple, List[WorldObject]],
+                          monsters: Monsters, doors: Doors,
+                          inventory: PlayerInventory) -> None:
+        for room in world_map:
+            room_doors = list(
+                filter(lambda elem: isinstance(elem, Door), room)
+            )
+            room_monsters = list(
+                filter(lambda elem: isinstance(elem, Monster), room)
+            )
+            for door in room_doors:
+                item_to_open = Item(door.door_name+'_opener')
+                monster_w_item: Monster = random.choice(room_monsters)
+                open_door_action = OpenDoorAction(door.name, doors)
+                spawn_item_action = SpawnItemInInventoryAction(
+                    item_to_open, inventory
+                )
+                inventory.item_action_mapping[item_to_open._item_name] =\
+                    open_door_action
+                monsters.monster_action_mapping[monster_w_item.monster_name] =\
+                    spawn_item_action
