@@ -8,4 +8,6 @@ jobs:
       - run: sudo pip install pytest
       - run: sudo pip install mypy
       - run: sudo pip install flake8
-      - run: ./runtests.sh
+      - run: python -m flake8
+      - run: python -m mypy -p pork
+      - run: python -m pytest -v

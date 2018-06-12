@@ -5,19 +5,19 @@ from typing import List
 class CreationDecider(abc.ABC):
 
     @abc.abstractmethod
-    def should_create_one_more_room_north() -> bool: pass
+    def should_create_one_more_room_north(self) -> bool: pass
 
     @abc.abstractmethod
-    def should_create_one_more_room_east() -> bool: pass
+    def should_create_one_more_room_east(self) -> bool: pass
 
     @abc.abstractmethod
-    def should_create_one_more_room_south() -> bool: pass
+    def should_create_one_more_room_south(self) -> bool: pass
 
     @abc.abstractmethod
-    def should_create_one_more_room_west() -> bool: pass
+    def should_create_one_more_room_west(self) -> bool: pass
 
     @abc.abstractmethod
-    def doors_in_which_directions() -> List[str]: pass
+    def doors_in_which_directions(self) -> List[str]: pass
 
     @abc.abstractmethod
-    def how_many_monsters_in_current_room() -> int: pass
+    def how_many_monsters_in_current_room(self) -> int: pass
