@@ -61,14 +61,13 @@ class ServiceBus:
 
 class CommandBus(ServiceBus):
 
-    def dispatch(self, command: Command) -> None:
-        for router in self._routers:
-            router.route(command)
+    def dispatch(self, command) -> None:
+        self._routers[-1].route(command)
 
 
 class EventBus(ServiceBus):
 
-    def dispatch(self, event: Event) -> None:
+    def dispatch(self, event) -> None:
         for router in self._routers:
             router.route(event)
 

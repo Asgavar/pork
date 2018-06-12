@@ -1,9 +1,9 @@
-import pork.cqrs
+from typing import NamedTuple
 
 
-class DescriptionOfWholeWorld(pork.cqrs.Query):
+class DescriptionOfWholeWorld(NamedTuple):
     pass
 
 
-class DescriptionOfInventory(pork.cqrs.Query):
+class DescriptionOfInventory(NamedTuple):
     pass

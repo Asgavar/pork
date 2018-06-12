@@ -1,13 +1,11 @@
-import pork.cqrs
+from typing import NamedTuple
 
 
-class ItemUsed(pork.cqrs.Event):
+class ItemUsed(NamedTuple):
 
-    def __init__(self, item_name):
-        self.item_name = item_name
+    item_name: str
 
 
-class MonsterDied(pork.cqrs.Event):
+class MonsterDied(NamedTuple):
 
-    def __init__(self, monster_name):
-        self.monster_name = monster_name
+    monster_name: str
