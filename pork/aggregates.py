@@ -1,6 +1,6 @@
 from collections import defaultdict
 import functools
-from typing import DefaultDict, Dict, List, Tuple
+from typing import Dict, List, Mapping, Tuple
 
 from pork.entities import Door, Item, Monster, WorldObject
 
@@ -10,7 +10,7 @@ class WorldLayout:
     VERTICAL_POSITION = 1
 
     def __init__(self, initial_horizontal: int=0, initial_vertical: int=0,
-                 world_map: DefaultDict[Tuple, List[WorldObject]] =
+                 world_map: Mapping[Tuple, List[WorldObject]] =
                  defaultdict(lambda: [])) -> None:
         self._player_loc = [initial_horizontal, initial_vertical]
         self._world_map = world_map
