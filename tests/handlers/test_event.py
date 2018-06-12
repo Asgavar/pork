@@ -36,14 +36,14 @@ def test_item_spawning_after_killing_monster():
     command_bus.attach_router(command_router)
     monster_name = 'groźny potwór boję się go'
     monster = e.Monster(monster_name, 0)
+    item = e.Item('pewne coś')
+    inventory = a.PlayerInventory()
     monsters_aggregate = a.Monsters({
         monster_name: monster
-    })
-    inventory = a.PlayerInventory()
-    item = e.Item('pewne coś')
-    handler = evh.MonsterDiedHandler({
+    }, {
         monster_name: act.SpawnItemInInventoryAction(item, inventory)
     })
+    handler = evh.MonsterDiedHandler(monsters_aggregate)
     attack_handler = ch.AttackMonsterHandler(monsters_aggregate, event_bus)
     event_router.route_class_to_func(ev.MonsterDied, handler)
     command_router.route_class_to_func(c.AttackMonster, attack_handler)
