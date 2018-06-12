@@ -1,6 +1,7 @@
 from typing import Dict
 
 from pork.actions import Action
+from pork.aggregates import Monsters
 import pork.events as e
 
 
@@ -15,8 +16,8 @@ class ItemUsedHandler:
 
 class MonsterDiedHandler:
 
-    def __init__(self, monster_died_mapping: Dict[str, Action]) -> None:
-        self._monster_died_mapping = monster_died_mapping
+    def __init__(self, monsters: Monsters) -> None:
+        self.monsters = monsters
 
     def __call__(self, event: e.MonsterDied):
-        self._monster_died_mapping[event.monster_name].trigger()
+        self.monsters.monster_action_mapping[event.monster_name].trigger()

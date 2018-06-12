@@ -1,9 +1,11 @@
 import abc
 import random
 from typing import Dict, List, Tuple
+import uuid
 
+from pork.actions import OpenDoorAction, SpawnItemInInventoryAction
 from pork.aggregates import Doors, Monsters, WorldLayout
-from pork.entities import Item, WorldObject
+from pork.entities import Door, Item, Monster, WorldObject
 
 
 class CreationDecider(abc.ABC):
@@ -70,18 +72,38 @@ class WorldGenerator:
         self.how_many_rooms = how_many_rooms
         self.marked_so_far = 0
 
-    def create_world_map(self) -> Dict[Tuple, List[WorldObject]]:
-        pass
+    def create_world_map(self) -> Dict[Tuple[int, int], List[WorldObject]]:
+        STARTING_POSITION = (0, 0)
+        world_map = {
+            coords: self.create_room(coords)
+            for coords in self.mark_rooms_to_be_created(STARTING_POSITION)
+        }
 
-    def create_room(self) -> List[WorldObject]:
-        pass
+        return world_map
 
-    def create_door(self, direction: str):
-        pass
+    def create_room(self, coords: XYTuple) -> List[WorldObject]:
+        room_as_list = [
+            self.create_monster()
+            for _ in range(self.decider.how_many_monsters_in_current_room())
+        ]
+        door_directions = self.decider.doors_in_which_directions()
+        possible_directions = ['north', 'east', 'south', 'west']
+        doors_in_room = [
+            direction for direction in possible_directions
+            if direction in door_directions
+        ]
+        room_as_list.extend(doors_in_room)
 
-    def create_monster(self, monsters: Monsters, item_dropped: Item):
-        # TODO: monster died mapping
-        pass
+        return room_as_list
+
+    def create_door(self, coords: XYTuple, direction: str) -> Door:
+        door_name = 'door_'+str(coords[0])+'_'+str(coords[1])+'_'+direction
+        return Door(door_name, direction)
+
+    def create_monster(self):
+        MONSTER_MAX_HEALTH = 100
+        monster_name = 'potwór_'+str(uuid.uuid4())[0, 9]
+        return Monster(monster_name, MONSTER_MAX_HEALTH)
 
     def mark_rooms_to_be_created(self, current_pos: XYTuple) -> List[XYTuple]:
         branches_from_here = []
@@ -108,6 +130,19 @@ class WorldGenerator:
 
         return branches_from_here + branches_from_branches
 
-    def process_world_map(self, world_layout: WorldLayout,
-                          monsters: Monsters, doors: Doors):
-        pass
+    # def process_world_map(self, world_map: Dict[Tuple, List[WorldObject]],
+    #                       monsters: Monsters, doors: Doors, inventory) -> None:
+    #     for room in world_map:
+    #         room_doors = list(
+    #             filter(lambda elem: isinstance(elem, Door), room)
+    #         )
+    #         room_monsters = list(
+    #             filter(lambda elem: isinstance(elem, Monster), room)
+    #         )
+    #         for door in room_doors:
+    #             item_which_will_open_it = Item(door.door_name+'_opener')
+    #             monster_which_will_drop_it: Monster = random.choice(room_monsters)
+    #             open_door_action = OpenDoorAction(door.name, doors)
+    #             spawn_item_action = SpawnItemInInventoryAction(
+    #                 item_which_will_open_it, inventory
+    #             )

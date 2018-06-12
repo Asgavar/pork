@@ -66,8 +66,10 @@ class Doors:
 
 class Monsters:
 
-    def __init__(self, monsters: Dict[str, Monster]={}) -> None:
+    def __init__(self, monsters: Dict[str, Monster]={},
+                 monster_action_mapping={}) -> None:
         self._monsters = monsters
+        self.monster_action_mapping = monster_action_mapping
 
     def attack(self, monster_name: str, power: int) -> None:
         self._monsters[monster_name].health -= power
