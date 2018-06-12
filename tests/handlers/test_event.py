@@ -19,7 +19,8 @@ def test_door_opening_after_item_usage():
     item_used_mapping = {
         'przedmiocik': act.OpenDoorAction('door_0_0_north', doors_aggregate),
     }
-    handler = evh.ItemUsedHandler(item_used_mapping)
+    inventory = a.PlayerInventory(item_action_mapping=item_used_mapping)
+    handler = evh.ItemUsedHandler(inventory)
     router.route_class_to_func(ev.ItemUsed, handler)
 
     assert door_0_0_north.is_open is False

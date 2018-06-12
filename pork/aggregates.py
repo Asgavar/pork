@@ -80,8 +80,10 @@ class Monsters:
 
 class PlayerInventory:
 
-    def __init__(self, player_items: List[Item]=[]) -> None:
+    def __init__(self, player_items: List[Item]=[],
+                 item_action_mapping: Dict={}) -> None:
         self._player_items = player_items
+        self.item_action_mapping = item_action_mapping
 
     def add_item_to_inventory(self, new_item: Item):
         self._player_items.append(new_item)

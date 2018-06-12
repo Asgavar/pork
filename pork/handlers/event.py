@@ -1,17 +1,14 @@
-from typing import Dict
-
-from pork.actions import Action
-from pork.aggregates import Monsters
+from pork.aggregates import Monsters, PlayerInventory
 import pork.events as e
 
 
 class ItemUsedHandler:
 
-    def __init__(self, item_used_mapping: Dict[str, Action]) -> None:
-        self._item_used_mapping = item_used_mapping
+    def __init__(self, inventory: PlayerInventory) -> None:
+        self.inventory = inventory
 
     def __call__(self, event: e.ItemUsed):
-        self._item_used_mapping[event.item_name].trigger()
+        self.inventory.item_action_mapping[event.item_name].trigger()
 
 
 class MonsterDiedHandler:
