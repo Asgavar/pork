@@ -1,5 +1,5 @@
-import pork.aggregates as a
-import pork.queries as q
+import aggregates as a
+import queries as q
 
 
 class DescriptionOfWholeWorldHandler:

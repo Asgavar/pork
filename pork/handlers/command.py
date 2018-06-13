@@ -1,9 +1,9 @@
 import random
 
-import pork.aggregates as a
-import pork.commands as c
-import pork.cqrs
-import pork.events as ev
+import aggregates as a
+import commands as c
+import cqrs
+import events as ev
 
 
 class MovePlayerHandler:
@@ -29,7 +29,7 @@ class RandomRandintTo100:
 
 class AttackMonsterHandler:
 
-    def __init__(self, monsters: a.Monsters, event_bus: pork.cqrs.EventBus,
+    def __init__(self, monsters: a.Monsters, event_bus: cqrs.EventBus,
                  rng=RandomRandintTo100()) -> None:
         self.rng = rng
         self.monsters = monsters

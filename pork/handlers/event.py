@@ -1,5 +1,5 @@
-from pork.aggregates import Monsters, PlayerInventory
-import pork.events as e
+from aggregates import Monsters, PlayerInventory
+import events as e
 
 
 class ItemUsedHandler:
