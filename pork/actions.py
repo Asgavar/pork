@@ -1,7 +1,7 @@
 import abc
 
-import pork.aggregates as a
-import pork.entities as e
+import aggregates as a
+import entities as e
 
 
 class Action(abc.ABC):

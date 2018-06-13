@@ -3,9 +3,9 @@ import random
 from typing import Dict, List, Tuple
 import uuid
 
-from pork.actions import OpenDoorAction, SpawnItemInInventoryAction
-from pork.aggregates import Doors, Monsters, PlayerInventory
-from pork.entities import Door, Item, Monster, WorldObject
+from actions import OpenDoorAction, SpawnItemInInventoryAction
+from aggregates import Doors, Monsters, PlayerInventory
+from entities import Door, Item, Monster, WorldObject
 
 
 class CreationDecider(abc.ABC):
@@ -144,8 +144,8 @@ class WorldGenerator:
             for door in room_doors:
                 item_to_open = Item(door._door_name+'_opener')
                 monster_w_item: Monster = random.choice(room_monsters)
-                # while monster_w_item in monsters.monster_action_mapping.keys():
-                #     monster_w_item = random.choice(room_monsters)
+                while monster_w_item in monsters.monster_action_mapping.keys():
+                    monster_w_item = random.choice(room_monsters)
                 open_door_action = OpenDoorAction(door._door_name, doors)
                 spawn_item_action = SpawnItemInInventoryAction(
                     item_to_open, inventory

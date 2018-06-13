@@ -2,7 +2,7 @@ from collections import defaultdict
 import functools
 from typing import Dict, List, Mapping, Tuple
 
-from pork.entities import Door, Item, Monster, WorldObject
+from entities import Door, Item, Monster, WorldObject
 
 
 class WorldLayout:
