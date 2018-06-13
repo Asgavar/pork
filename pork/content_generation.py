@@ -51,7 +51,7 @@ class PseudoRandomCreationDecider(CreationDecider):
         ]
 
     def how_many_monsters_in_current_room(self) -> int:
-        return int(self.roll()) % 10
+        return int(self.roll()) % 10 + 1
 
     @staticmethod
     def roll() -> str:
@@ -103,7 +103,7 @@ class WorldGenerator:
 
     def create_monster(self):
         MONSTER_MAX_HEALTH = 100
-        monster_name = 'potwór_'+str(uuid.uuid4())[0:9]
+        monster_name = 'potwór_'+str(uuid.uuid4())[0:8]
         return Monster(monster_name, MONSTER_MAX_HEALTH)
 
     def mark_rooms_to_be_created(self, current_pos: XYTuple) -> List[XYTuple]:
