@@ -19,7 +19,8 @@ class OnlyOneFunctionRouter():
         self._route_map[clsname] = handler_func
 
     def route(self, event_command_query) -> Any:
-        return self._route_map[type(event_command_query)](event_command_query)
+        handler_to_invoke = self._route_map[type(event_command_query)]
+        return handler_to_invoke(event_command_query)
 
 
 class AllWhichMatchFunctionRouter():
@@ -28,10 +29,10 @@ class AllWhichMatchFunctionRouter():
         self._route_map = defaultdict(lambda: [])
 
     def route_class_to_func(self, clsname, handler_func) -> None:
-        self._route_map[clsname].append(handler_func)
+        self._route_map[clsname.__qualname__].append(handler_func)
 
     def route(self, event_command_query):
-        for handler in self._route_map[type(event_command_query)]:
+        for handler in self._route_map[type(event_command_query).__qualname__]:
             handler(event_command_query)
 
 
