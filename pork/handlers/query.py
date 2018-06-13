@@ -2,12 +2,12 @@ import aggregates as a
 import queries as q
 
 
-class DescriptionOfWholeWorldHandler:
+class DescriptionOfCurrentRoomHandler:
 
     def __init__(self, world_layout: a.WorldLayout) -> None:
         self.world_layout = world_layout
 
-    def __call__(self, query: q.DescriptionOfWholeWorld) -> str:
+    def __call__(self, query: q.DescriptionOfCurrentRoom) -> str:
         descriptions = [
             world_item.description()
             for world_item in self.world_layout.objects_in_the_current_room()

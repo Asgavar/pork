@@ -48,6 +48,12 @@ class WorldLayout:
     def objects_in_the_current_room(self) -> List:
         return self._world_map[tuple(self._player_loc)]
 
+    def describe_objects_in_the_current_room(self) -> List:
+        return [
+            world_object.description()
+            for world_object in self.objects_in_the_current_room()
+        ]
+
 
 class Doors:
 
@@ -93,3 +99,6 @@ class PlayerInventory:
 
     def currently_held_items(self):
         return self._player_items
+
+    def describe_currently_held_items(self):
+        return [item.description() for item in self._player_items]

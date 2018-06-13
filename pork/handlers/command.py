@@ -6,6 +6,15 @@ import cqrs
 import events as ev
 
 
+class UseItemHandler:
+
+    def __init__(self, event_bus: cqrs.EventBus) -> None:
+        self.event_bus = event_bus
+
+    def __call__(self, command: c.UseItem):
+        self.event_bus.dispatch(ev.ItemUsed(command.item_name))
+
+
 class MovePlayerHandler:
 
     def __init__(self, world_layout: a.WorldLayout) -> None:

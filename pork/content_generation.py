@@ -141,6 +141,10 @@ class WorldGenerator:
             room_monsters = list(
                 filter(lambda elem: isinstance(elem, Monster), room)
             )
+
+            for monster in room_monsters:
+                monsters._monsters[monster.monster_name] = monster
+
             for door in room_doors:
                 item_to_open = Item(door._door_name+'_opener')
                 monster_w_item: Monster = random.choice(room_monsters)

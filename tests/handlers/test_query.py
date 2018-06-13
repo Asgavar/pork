@@ -5,7 +5,7 @@ import pork.handlers.query as qh
 import pork.queries as q
 
 
-def test_description_of_whole_world():
+def test_description_of_current_room():
     querybus = pork.cqrs.QueryBus()
     router = pork.cqrs.OnlyOneFunctionRouter()
     querybus.attach_router(router)
@@ -18,10 +18,10 @@ def test_description_of_whole_world():
         ]
     }
     world_layout = a.WorldLayout(world_map=world_map)
-    handler = qh.DescriptionOfWholeWorldHandler(world_layout)
-    router.route_class_to_func(q.DescriptionOfWholeWorld, handler)
+    handler = qh.DescriptionOfCurrentRoomHandler(world_layout)
+    router.route_class_to_func(q.DescriptionOfCurrentRoom, handler)
 
-    returned_description = querybus.dispatch(q.DescriptionOfWholeWorld())
+    returned_description = querybus.dispatch(q.DescriptionOfCurrentRoom())
 
     assert 'Drzwi' in returned_description
     assert 'north' in returned_description

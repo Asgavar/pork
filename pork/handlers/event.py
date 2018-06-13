@@ -17,4 +17,5 @@ class MonsterDiedHandler:
         self.monsters = monsters
 
     def __call__(self, event: e.MonsterDied):
-        self.monsters.monster_action_mapping[event.monster_name].trigger()
+        if event.monster_name in self.monsters.monster_action_mapping:
+            self.monsters.monster_action_mapping[event.monster_name].trigger()

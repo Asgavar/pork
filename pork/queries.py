@@ -1,7 +1,7 @@
 from typing import NamedTuple
 
 
-class DescriptionOfWholeWorld(NamedTuple):
+class DescriptionOfCurrentRoom(NamedTuple):
     pass
 
 
