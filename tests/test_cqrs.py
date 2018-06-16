@@ -1,5 +1,5 @@
 import pytest
-import pork.cqrs
+import pork.messaging
 
 
 class SpyEventHandler:
@@ -16,7 +16,7 @@ class DummyEvent:
 
 
 def test_only_one_func_router(route_def_repetitions):
-    router = pork.cqrs.OnlyOneFunctionRouter()
+    router = pork.messaging.OnlyOneFunctionRouter()
     handler = SpyEventHandler()
     repeat_n_times(
         lambda: router.route_class_to_func(DummyEvent, handler),
@@ -29,7 +29,7 @@ def test_only_one_func_router(route_def_repetitions):
 
 
 def test_many_func_router(route_def_repetitions):
-    router = pork.cqrs.AllWhichMatchFunctionRouter()
+    router = pork.messaging.AllWhichMatchFunctionRouter()
     handler = SpyEventHandler()
     repeat_n_times(
         lambda: router.route_class_to_func(DummyEvent, handler),

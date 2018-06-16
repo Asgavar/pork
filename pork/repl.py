@@ -5,7 +5,7 @@ import sys
 
 import aggregates as a
 import content_generation
-import cqrs
+import messaging
 from handlers import command as ch
 from handlers import event as evh
 from handlers import query as qh
@@ -20,8 +20,8 @@ class PorkShell(cmd.Cmd):
 
     def __init__(self, world: a.WorldLayout, doors: a.Doors,
                  monsters: a.Monsters, inventory: a.PlayerInventory,
-                 command_bus: cqrs.CommandBus, event_bus: cqrs.EventBus,
-                 query_bus: cqrs.QueryBus) -> None:
+                 command_bus: messaging.CommandBus, event_bus: messaging.EventBus,
+                 query_bus: messaging.QueryBus) -> None:
         self.world = world
         self.doors = doors
         self.monsters = monsters
@@ -71,12 +71,21 @@ def run_game(rooms_count: int):
     world._world_map = world_map
     generator.process_world_map(world_map, monsters, doors, inventory)
 
+<<<<<<< HEAD
     command_bus = cqrs.CommandBus()
     event_bus = cqrs.EventBus()
     query_bus = cqrs.QueryBus()
     command_router = cqrs.OnlyOneFunctionRouter()
     event_router = cqrs.OnlyOneFunctionRouter()
     query_router = cqrs.OnlyOneFunctionRouter()
+=======
+    command_bus = messaging.CommandBus()
+    event_bus = messaging.EventBus()
+    query_bus = messaging.QueryBus()
+    command_router = messaging.OnlyOneFunctionRouter()
+    event_router = messaging.AllWhichMatchFunctionRouter()
+    query_router = messaging.OnlyOneFunctionRouter()
+>>>>>>> 7e2d55b... Rename cqrs.py to messaging.py
     command_bus.attach_router(command_router)
     event_bus.attach_router(event_router)
     query_bus.attach_router(query_router)

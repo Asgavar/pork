@@ -2,13 +2,13 @@ import random
 
 import aggregates as a
 import commands as c
-import cqrs
+import messaging
 import events as ev
 
 
 class UseItemHandler:
 
-    def __init__(self, event_bus: cqrs.EventBus) -> None:
+    def __init__(self, event_bus: messaging.EventBus) -> None:
         self.event_bus = event_bus
 
     def __call__(self, command: c.UseItem):
@@ -38,7 +38,7 @@ class RandomRandintTo100:
 
 class AttackMonsterHandler:
 
-    def __init__(self, monsters: a.Monsters, event_bus: cqrs.EventBus,
+    def __init__(self, monsters: a.Monsters, event_bus: messaging.EventBus,
                  rng=RandomRandintTo100()) -> None:
         self.rng = rng
         self.monsters = monsters

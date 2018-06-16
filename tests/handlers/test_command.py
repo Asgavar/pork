@@ -1,13 +1,13 @@
 import pork.aggregates as a
 import pork.commands as c
 import pork.entities as e
-import pork.cqrs
+import pork.messaging
 import pork.handlers.command as ch
 
 
 def test_player_movement():
-    command_bus = pork.cqrs.CommandBus()
-    router = pork.cqrs.OnlyOneFunctionRouter()
+    command_bus = pork.messaging.CommandBus()
+    router = pork.messaging.OnlyOneFunctionRouter()
     command_bus.attach_router(router)
     world_layout = a.WorldLayout()
     handler = ch.MovePlayerHandler(world_layout)
@@ -34,8 +34,8 @@ class FakeRng:
 
 
 def test_attacking():
-    command_bus = pork.cqrs.CommandBus()
-    router = pork.cqrs.OnlyOneFunctionRouter()
+    command_bus = pork.messaging.CommandBus()
+    router = pork.messaging.OnlyOneFunctionRouter()
     command_bus.attach_router(router)
     monster1_name = 'Przeraźliwy Przedsiębiorca'
     monster1 = e.Monster(monster1_name, 15)
@@ -48,7 +48,7 @@ def test_attacking():
     rng = FakeRng()
     router.route_class_to_func(
         c.AttackMonster,
-        ch.AttackMonsterHandler(monsters, pork.cqrs.EventBus(), rng=rng)
+        ch.AttackMonsterHandler(monsters, pork.messaging.EventBus(), rng=rng)
     )
 
     command_bus.dispatch(c.AttackMonster(monster1_name))

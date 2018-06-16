@@ -1,13 +1,13 @@
 import pork.aggregates as a
-import pork.cqrs
+import pork.messaging
 import pork.entities as e
 import pork.handlers.query as qh
 import pork.queries as q
 
 
 def test_description_of_current_room():
-    querybus = pork.cqrs.QueryBus()
-    router = pork.cqrs.OnlyOneFunctionRouter()
+    querybus = pork.messaging.QueryBus()
+    router = pork.messaging.OnlyOneFunctionRouter()
     querybus.attach_router(router)
     some_door = e.Door('north_doors_0_0', 'north')
     some_monster = e.Monster('Wielki Groźny Szczur', 100)
@@ -32,8 +32,8 @@ def test_description_of_current_room():
 
 
 def test_description_of_inventory():
-    querybus = pork.cqrs.QueryBus()
-    router = pork.cqrs.OnlyOneFunctionRouter()
+    querybus = pork.messaging.QueryBus()
+    router = pork.messaging.OnlyOneFunctionRouter()
     querybus.attach_router(router)
     item1 = e.Item('Kijek Prawdy')
     item2 = e.Item('Patyk Kłamstwa')
