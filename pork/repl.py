@@ -20,7 +20,8 @@ class PorkShell(cmd.Cmd):
 
     def __init__(self, world: a.WorldLayout, doors: a.Doors,
                  monsters: a.Monsters, inventory: a.PlayerInventory,
-                 command_bus: messaging.CommandBus, event_bus: messaging.EventBus,
+                 command_bus: messaging.CommandBus,
+                 event_bus: messaging.EventBus,
                  query_bus: messaging.QueryBus) -> None:
         self.world = world
         self.doors = doors
@@ -30,6 +31,15 @@ class PorkShell(cmd.Cmd):
         self.event_bus = event_bus
         self.query_bus = query_bus
         super().__init__()
+
+    def __call__(self, event):
+        event_mapping = {
+            e.ItemUsed.__qualname__:
+                lambda ev: print(f'Użyłeś {event.item_name}'),
+            e.MonsterDied.__qualname__:
+                lambda ev: print(f'{ev.monster_name} umarł')
+        }
+        event_mapping[type(event).__qualname__](event)
 
     def do_ekwipunek(self, arg):
         print(
@@ -49,7 +59,6 @@ class PorkShell(cmd.Cmd):
         )
 
     def do_uzyj(self, arg):
-        print(f'Używasz {arg}')
         self.command_bus.dispatch(c.UseItem(arg))
 
     def do_wyjdz(self, arg):
@@ -57,7 +66,10 @@ class PorkShell(cmd.Cmd):
 
     def do_zaatakuj(self, arg):
         print(f'Atakujesz {arg}')
-        self.command_bus.dispatch(c.AttackMonster(arg))
+        try:
+            self.command_bus.dispatch(c.AttackMonster(arg))
+        except KeyError:
+            print('Nie ma takiego potwora!')
 
 
 def run_game(rooms_count: int):
@@ -70,22 +82,12 @@ def run_game(rooms_count: int):
     world_map = generator.create_world_map()
     world._world_map = world_map
     generator.process_world_map(world_map, monsters, doors, inventory)
-
-<<<<<<< HEAD
-    command_bus = cqrs.CommandBus()
-    event_bus = cqrs.EventBus()
-    query_bus = cqrs.QueryBus()
-    command_router = cqrs.OnlyOneFunctionRouter()
-    event_router = cqrs.OnlyOneFunctionRouter()
-    query_router = cqrs.OnlyOneFunctionRouter()
-=======
     command_bus = messaging.CommandBus()
     event_bus = messaging.EventBus()
     query_bus = messaging.QueryBus()
     command_router = messaging.OnlyOneFunctionRouter()
     event_router = messaging.AllWhichMatchFunctionRouter()
     query_router = messaging.OnlyOneFunctionRouter()
->>>>>>> 7e2d55b... Rename cqrs.py to messaging.py
     command_bus.attach_router(command_router)
     event_bus.attach_router(event_router)
     query_bus.attach_router(query_router)
@@ -112,6 +114,8 @@ def run_game(rooms_count: int):
 
     shell = PorkShell(world, doors, monsters, inventory,
                       command_bus, event_bus, query_bus)
+    event_router.route_class_to_func(e.ItemUsed, shell)
+    event_router.route_class_to_func(e.MonsterDied, shell)
     shell.cmdloop()
 
 

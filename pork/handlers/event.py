@@ -19,3 +19,4 @@ class MonsterDiedHandler:
     def __call__(self, event: e.MonsterDied):
         if event.monster_name in self.monsters.monster_action_mapping:
             self.monsters.monster_action_mapping[event.monster_name].trigger()
+        self.monsters._monsters.pop(event.monster_name)
